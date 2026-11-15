@@ -5,7 +5,11 @@ import plotly.express as px
 st.title("Annual Live Birth by District and Sex")
 
 # Load cleaned dataset
-df = pd.read_csv("data/annual_live_birth.csv")
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+df = pd.read_csv(BASE_DIR / "data" / "annual_live_birth_cleaned.csv")
 
 st.subheader("Objective 3")
 st.write(
