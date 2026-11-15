@@ -5,7 +5,12 @@ import plotly.express as px
 st.title("School Completion Rates")
 
 # Load cleaned dataset
-df = pd.read_csv("data/school_completion.csv")
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+df = pd.read_csv(BASE_DIR / "data" / "school_completion_cleaned.csv")
+
 
 st.subheader("Objective 2")
 st.write(
