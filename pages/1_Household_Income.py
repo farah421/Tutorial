@@ -5,7 +5,11 @@ import plotly.express as px
 st.title("Household Income Inequality")
 
 # Load cleaned dataset
-df = pd.read_csv("data/household_income.csv")
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+df = pd.read_csv(BASE_DIR / "data" / "household_income_cleaned.csv")
 
 st.subheader("Objective 1")
 st.write(
