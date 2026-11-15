@@ -1,27 +1,27 @@
+
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from pathlib import Path
 
 st.title("Annual Live Birth by District and Sex")
 
 # Load cleaned dataset
-from pathlib import Path
-
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 df = pd.read_csv(BASE_DIR / "data" / "annual_live_birth_cleaned.csv")
 
+# Clean sex values
+df["sex"] = df["sex"].astype(str).str.strip().str.lower()
+
+# Filter male and female only
+gender_df = df[df["sex"].isin(["male", "female"])].copy()
+
+# Objective
 st.subheader("Objective 3")
 st.write(
     "To analyse annual live births across districts "
     "in Malaysia according to sex."
 )
-
-# Filter gender data
-gender_df = df[
-    df["sex"].astype(str).str.strip().str.lower().isin(["male", "female"])
-]
-
 
 # Summary statistics
 col1, col2, col3 = st.columns(3)
@@ -57,7 +57,10 @@ fig1 = px.bar(
     x="district",
     y="abs",
     title="Total Live Births by District",
-    labels={"district": "District", "abs": "Number of Births"}
+    labels={
+        "district": "District",
+        "abs": "Number of Births"
+    }
 )
 
 st.plotly_chart(fig1, use_container_width=True)
@@ -66,8 +69,8 @@ st.plotly_chart(fig1, use_container_width=True)
 st.subheader("Visualization 2: Live Births by Sex")
 
 sex_df = (
-    filtered_df[[
-        filtered_df["sex"].str.strip().str.lower().isin(["male", "female"])
+    filtered_df[
+        filtered_df["sex"].isin(["male", "female"])
     ]
     .groupby("sex", as_index=False)["abs"]
     .sum()
@@ -87,7 +90,7 @@ st.plotly_chart(fig2, use_container_width=True)
 st.subheader("Visualization 3: Live Birth Trends")
 
 trend_df = (
-     gender_df.groupby(["date", "sex"], as_index=False)["abs"]
+    gender_df.groupby(["date", "sex"], as_index=False)["abs"]
     .sum()
 )
 
@@ -98,12 +101,15 @@ fig3 = px.line(
     color="sex",
     markers=True,
     title="Live Birth Trends by Sex",
-    labels={"date": "Date", "abs": "Number of Births"}
+    labels={
+        "date": "Date",
+        "abs": "Number of Births"
+    }
 )
 
 st.plotly_chart(fig3, use_container_width=True)
 
-# Interpretation
+# Data Interpretation
 st.subheader("Data Interpretation")
 st.write(
     "Compare the number of live births across districts "
