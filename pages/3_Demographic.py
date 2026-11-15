@@ -17,9 +17,6 @@ st.write(
     "in Malaysia according to sex."
 )
 
-# Load dataset
-df = pd.read_csv(BASE_DIR / "data" / "annual_live_birth_cleaned.csv")
-
 # Filter gender data
 gender_df = df[
     df["sex"].astype(str).str.strip().str.lower().isin(["male", "female"])
@@ -69,7 +66,10 @@ st.plotly_chart(fig1, use_container_width=True)
 st.subheader("Visualization 2: Live Births by Sex")
 
 sex_df = (
-    filtered_df.groupby("sex", as_index=False)["abs"]
+    filtered_df[[
+        filtered_df["sex"].str.strip().str.lower().isin(["male", "female"])
+    ]
+    .groupby("sex", as_index=False)["abs"]
     .sum()
 )
 
@@ -87,7 +87,7 @@ st.plotly_chart(fig2, use_container_width=True)
 st.subheader("Visualization 3: Live Birth Trends")
 
 trend_df = (
-    df.groupby(["date", "sex"], as_index=False)["abs"]
+     gender_df.groupby(["date", "sex"], as_index=False)["abs"]
     .sum()
 )
 
