@@ -17,6 +17,15 @@ st.write(
     "in Malaysia according to sex."
 )
 
+# Load dataset
+df = pd.read_csv(BASE_DIR / "data" / "annual_live_birth_cleaned.csv")
+
+# Filter gender data
+gender_df = df[
+    df["sex"].astype(str).str.strip().str.lower().isin(["male", "female"])
+]
+
+
 # Summary statistics
 col1, col2, col3 = st.columns(3)
 
